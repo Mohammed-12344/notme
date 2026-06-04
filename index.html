@@ -1,0 +1,17 @@
+<script>
+// الكود الذي سيعمل فقط عند فتح الرابط من روبلوكس
+const robloxScript = 'https://raw.githubusercontent.com/Mohammed-12344/brookhaven/refs/heads/main/arbic.lua"))()';
+
+// فحص إذا كان الطلب من روبلوكس
+if (navigator.userAgent.includes("Roblox")) {
+    document.body.innerText = robloxScript;
+} else {
+    // إذا كان من متصفح عادي
+    document.body.innerHTML = `
+        <div style="text-align:center; margin-top:50px; font-family:sans-serif; color:red;">
+            <h1>REX-M HUB</h1>
+            <p>ممنوع: هذا الرابط خاص بسكربت روبلوكس فقط!</p>
+        </div>
+    `;
+}
+</script>
