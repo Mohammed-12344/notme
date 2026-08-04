@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USHINOU Protection - حماية السكربتات</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { font-family: 'Cairo', sans-serif; background: #08090a; color: #fff; }
+  .code { font-family: 'JetBrains Mono', monospace; }
+  .glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .btn-silver {
+    background: linear-gradient(135deg, #6b7280 0%, #9ca3af 50%, #6b7280 100%);
+    box-shadow: 0 8px 24px rgba(156,163,175,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    transition: all 0.2s ease;
+  }
+  .btn-silver:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(156,163,175,0.35), inset 0 1px 0 rgba(255,255,255,0.2); }
+  .btn-silver:active { transform: translateY(0); }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #0a0a0c; }
+  ::-webkit-scrollbar-thumb { background: #6b7280; border-radius: 4px; }
+
+  /* خلفية متحركة رمادية */
+  .bg-blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(120px);
+    opacity: 0.35;
+    animation: float 18s ease-in-out infinite;
+  }
+  .bg-blob.b1 { top: -10%; right: -10%; width: 500px; height: 500px; background: #71717a; animation-delay: 0s; }
+  .bg-blob.b2 { bottom: -15%; left: -10%; width: 550px; height: 550px; background: #52525b; animation-delay: 4s; }
+  .bg-blob.b3 { top: 40%; left: 40%; width: 400px; height: 400px; background: #a1a1aa; opacity: 0.15; animation-delay: 8s; }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -30px) scale(1.08); }
+    66% { transform: translate(-30px, 30px) scale(0.95); }
+  }
+
+  /* خطوط شبكة متحركة خفيفة (تحاكي إحساس فيديو خلفية) */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 44px 44px;
+    animation: gridmove 22s linear infinite;
+  }
+  @keyframes gridmove {
+    0% { background-position: 0 0; }
+    100% { background-position: 44px 44px; }
+  }
+
+  .noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+</style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+  <!-- Background -->
+  <div class="fixed inset-0 -z-10 bg-[#08090a]">
+    <div class="grid-overlay"></div>
+    <div class="bg-blob b1"></div>
+    <div class="bg-blob b2"></div>
+    <div class="bg-blob b3"></div>
+    <div class="noise"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="relative z-20 pt-6 pb-2">
+    <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl btn-silver flex items-center justify-center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-[26px] font-black leading-none tracking-tight">USHINOU <span class="text-transparent bg-clip-text bg-gradient-to-r from-zinc-300 to-zinc-500">Protection</span></h1>
+          <p class="text-[11px] text-zinc-500 -mt-1 font-medium">حماية السكربتات</p>
+        </div>
+      </div>
+      <div class="hidden md:flex items-center gap-2 text-[11px] font-mono px-3 py-1.5 rounded-full glass text-zinc-400">
+        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+        ONLINE
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 max-w-3xl mx-auto px-4 py-10">
+
+    <!-- PASSWORD GATE -->
+    <div id="gate">
+      <div class="glass rounded-[32px] p-8 md:p-12 shadow-[0_0_80px_rgba(0,0,0,0.5)] max-w-md mx-auto text-center">
+        <div class="w-14 h-14 rounded-2xl btn-silver flex items-center justify-center mx-auto mb-5">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h2 class="text-xl font-extrabold mb-2">دخول</h2>
+        <p class="text-zinc-500 text-sm mb-6">اكتب كلمة السر عشان تدخل</p>
+        <form id="gate-form" class="space-y-3">
+          <input id="gate-password" type="password" placeholder="كلمة السر"
+            class="w-full bg-[#0a0a0c] border border-white/10 rounded-2xl p-4 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-400/50 transition text-center">
+          <button type="submit" id="gate-submit" class="w-full btn-silver px-8 py-3.5 rounded-2xl font-extrabold text-white text-[14px]">دخول</button>
+        </form>
+        <p id="gate-error" class="hidden text-red-400 text-xs mt-4 font-bold">كلمة السر غلط</p>
+      </div>
+    </div>
+
+    <!-- CREATE PANEL -->
+    <div id="panel-create" class="hidden">
+      <div class="glass rounded-[32px] p-6 md:p-10 shadow-[0_0_80px_rgba(0,0,0,0.5)]">
+        <div class="flex items-start gap-4 mb-8">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-zinc-400/15 to-zinc-600/15 border border-zinc-400/25 flex items-center justify-center shrink-0">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4d4d8" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-2xl font-extrabold mb-1">حماية السكربت</h2>
+            <p class="text-zinc-400 text-sm leading-relaxed">حط سكربتك هنا، أو اختار ملف ترفعه</p>
+          </div>
+        </div>
+
+        <form id="protect-form" class="space-y-5">
+          <div id="code-field" class="space-y-3">
+            <div id="textarea-wrap" class="relative">
+              <textarea id="code-input" dir="ltr" rows="10" placeholder="الصق سكربتك هنا أو رابط raw..."
+                class="w-full bg-[#0a0a0c] border border-white/10 rounded-[18px] p-5 text-[13px] code text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-400/50 transition resize-y min-h-[220px] leading-6"></textarea>
+            </div>
+
+            <div id="file-chip" class="hidden items-center gap-3 bg-[#0a0a0c] border border-white/10 rounded-2xl p-4">
+              <div class="w-10 h-10 rounded-xl bg-zinc-400/15 border border-zinc-400/25 flex items-center justify-center shrink-0">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4d4d8" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p id="file-chip-name" dir="ltr" class="text-sm font-bold text-zinc-200 truncate"></p>
+                <p id="file-chip-size" class="text-[11px] text-zinc-500"></p>
+              </div>
+              <button type="button" id="file-chip-remove" class="w-8 h-8 rounded-lg glass hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition shrink-0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+
+            <label for="file-input" class="cursor-pointer glass hover:bg-white/[0.08] px-5 py-3.5 rounded-2xl text-sm font-bold flex items-center justify-center gap-2.5 transition border border-white/5 hover:border-zinc-400/30">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-400"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              اختار ملف ترفعه
+              <input type="file" id="file-input" accept=".lua,.luau,.txt" class="hidden">
+            </label>
+          </div>
+
+          <button type="submit" id="submit-btn" class="w-full btn-silver px-8 py-4 rounded-2xl font-extrabold text-white flex items-center justify-center gap-2.5 text-[15px]">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10z"/></svg>
+            احميه
+          </button>
+        </form>
+      </div>
+
+      <!-- Result -->
+      <div id="result-box" class="hidden mt-8">
+        <div class="glass rounded-[32px] p-6 md:p-10 shadow-[0_0_80px_rgba(0,0,0,0.4)]">
+          <div class="flex items-center gap-3 mb-8">
+            <div class="w-10 h-10 rounded-xl bg-green-500/15 border border-green-500/30 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div>
+              <h3 class="font-black text-xl">تم!</h3>
+              <p class="text-xs text-zinc-500">سكربتك محمي، هذا الرابط تحطه بدال سكربتك</p>
+            </div>
+          </div>
+
+          <div class="space-y-5">
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <label class="text-[13px] font-bold text-zinc-300">رابطك</label>
+                <button type="button" id="copy-link" class="text-[11px] px-3 py-1.5 rounded-lg glass hover:bg-white/10 transition text-zinc-400 hover:text-white font-bold">نسخ</button>
+              </div>
+              <div id="result-link" dir="ltr" class="code text-[13px] bg-[#0a0a0c] border border-white/10 rounded-2xl p-4 text-zinc-300 break-all"></div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <label class="text-[13px] font-bold text-zinc-300">حطه بدال سكربتك</label>
+                <button type="button" id="copy-load" class="text-[11px] px-3 py-1.5 rounded-lg glass hover:bg-white/10 transition text-zinc-400 hover:text-white font-bold">نسخ</button>
+              </div>
+              <div id="result-load" dir="ltr" class="code text-[13px] bg-[#0a0a0c] border border-white/10 rounded-2xl p-4 text-zinc-300 break-all"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+<script>
+const gate = document.getElementById('gate');
+const panelCreate = document.getElementById('panel-create');
+const gateForm = document.getElementById('gate-form');
+const gatePassword = document.getElementById('gate-password');
+const gateSubmit = document.getElementById('gate-submit');
+const gateError = document.getElementById('gate-error');
+
+function unlock(pw) {
+  gate.classList.add('hidden');
+  panelCreate.classList.remove('hidden');
+  sessionStorage.setItem('sitePassword', pw);
+}
+
+const savedPw = sessionStorage.getItem('sitePassword');
+if (true) { // أو if (savedPw || true)
+  unlock('anything');
+}
+
+gateForm.onsubmit = async (e) => {
+  e.preventDefault();
+  const password = gatePassword.value;
+  gateError.classList.add('hidden');
+  gateSubmit.disabled = true;
+  gateSubmit.textContent = '...';
+
+  try {
+    const res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      unlock(password);
+    } else {
+      gateError.classList.remove('hidden');
+      gatePassword.value = '';
+      gatePassword.focus();
+    }
+  } catch (err) {
+    gateError.textContent = 'ما قدرنا نوصل السيرفر';
+    gateError.classList.remove('hidden');
+  }
+
+  gateSubmit.disabled = false;
+  gateSubmit.textContent = 'دخول';
+};
+
+const $ = id => document.getElementById(id);
+const form = $('protect-form');
+const codeInput = $('code-input');
+const fileInput = $('file-input');
+const resultBox = $('result-box');
+const resultLink = $('result-link');
+const resultLoad = $('result-load');
+const submitBtn = $('submit-btn');
+const textareaWrap = $('textarea-wrap');
+const fileChip = $('file-chip');
+const fileChipName = $('file-chip-name');
+const fileChipSize = $('file-chip-size');
+const fileChipRemove = $('file-chip-remove');
+
+let uploadedFileContent = null;
+
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  return (bytes / 1024).toFixed(1) + ' KB';
+}
+
+fileInput.onchange = () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    uploadedFileContent = reader.result;
+    fileChipName.textContent = file.name;
+    fileChipSize.textContent = formatSize(file.size);
+    textareaWrap.classList.add('hidden');
+    fileChip.classList.remove('hidden');
+    fileChip.classList.add('flex');
+    codeInput.value = '';
+  };
+  reader.readAsText(file);
+};
+
+fileChipRemove.onclick = () => {
+  uploadedFileContent = null;
+  fileInput.value = '';
+  fileChip.classList.add('hidden');
+  fileChip.classList.remove('flex');
+  textareaWrap.classList.remove('hidden');
+};
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-800 text-white text-sm font-bold px-5 py-3 rounded-2xl shadow-2xl border border-white/10';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// يكتشف تلقائيًا: لو نص واحد بدون أسطر ويبدأ بـ http => رابط، غير كذا => كود مباشر
+function isUrl(value) {
+  const v = value.trim();
+  return /^https?:\/\/\S+$/i.test(v) && !v.includes('\n');
+}
+
+form.onsubmit = async (e) => {
+  e.preventDefault();
+
+  const raw = uploadedFileContent !== null ? uploadedFileContent : codeInput.value;
+  const value = raw.trim();
+
+  if (!value) {
+    showToast('حط سكربت أو رابط أول');
+    codeInput.focus();
+    return;
+  }
+
+  let payload;
+  if (uploadedFileContent === null && isUrl(value)) {
+    payload = { target: value };
+  } else {
+    payload = { code: value };
+  }
+  payload.password = sessionStorage.getItem('sitePassword') || '';
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<svg class="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="10" opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" opacity="0.75"/></svg> ثانية...';
+
+  try {
+    const res = await fetch('/api/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || 'ما اشتغل، جرب مرة ثانية');
+
+    const link = `${location.origin}/Scripts?Id=${data.id}`;
+    resultLink.textContent = link;
+    resultLoad.textContent = `loadstring(game:HttpGet("${link}"))()`;
+
+    resultBox.classList.remove('hidden');
+    resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    showToast('تمام، خلص');
+  } catch (err) {
+    showToast(err.message);
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10z"/></svg> إنشاء رابط محمي';
+};
+
+$('copy-link').onclick = () => {
+  navigator.clipboard.writeText(resultLink.textContent).then(() => showToast('تم نسخ الرابط'));
+};
+$('copy-load').onclick = () => {
+  navigator.clipboard.writeText(resultLoad.textContent).then(() => showToast('تم نسخ كود التشغيل'));
+};
+</script>
+</body>
+             </html>
+
+
